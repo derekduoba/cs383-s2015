@@ -1,0 +1,13 @@
+Algorithm:
+
+1.) Generate 100 unique canidates and stoe them into an array
+2.) Put each of the element into a fitness function
+	a. Check elem vs MaxVal - number_TBD
+		i. num > MAX_VAL Print(WINNER, x, y), break
+		ii. continue
+	b. Add to Max_Heap
+3.) Crossover
+	a. Make 4 pairs
+	b. Choose 2 highest
+	c. Mutate within +/-100
+4.) Repeat until solution found
