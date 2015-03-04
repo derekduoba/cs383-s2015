@@ -1,16 +1,16 @@
 import java.util.Random;
 
-public class Canidate{
+public class Candidate{
 
 	//You are welcome Derek.
 	public int x;
 	public int y;
 
-	Canidate(){
+	Candidate(){
 		generateTuple();
 	}
 
-	Canidate(int x, int y){
+	Candidate(int x, int y){
 		this.x = x;
 		this.y = y;
 	}
