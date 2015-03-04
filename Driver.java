@@ -15,6 +15,42 @@ public class Driver{
 		}
 	}
 
+    static int determineFitness(Candidate currentCandidate) {
+    
+            // determine + set a candidate's fitness score
+            
+            // add the current candidate to the fitness heap
+    
+    }
+
+    static void performSelection(Candidate currentCandidate) {
+
+        int n = 1;
+        if ((n+m) <= 100) {
+            // pair with index m + n
+        } else {
+            // pair with neighbor
+        }
+
+        // performCrossover();
+
+    }
+
+    static void performCrossover(Candidate parentOne, Candidate parentTwo) {
+
+        // make babies
+        
+        // mutate babies
+
+        // add mutated babies to uniqueCandidate
+    }
+
+    static void mutateChild(Candidate currentChild) {
+        
+        // add a random number between -50 and 50
+        
+    }
+
 	public static void main(String[] args){
 		Candidate uniqueCandidate[] = new Candidate[100];
 		/*int iterations = 1;*/
