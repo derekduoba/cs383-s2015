@@ -4,6 +4,9 @@ import java.lang.Math;
 
 public class Driver{
 
+    PriorityQueue<Candidate> fitnessHeap;
+
+    /*
 	static boolean compareObj(Candidate obj){
 		//temporarily 5,000,000; will eventually be ~10,000,000 - 25
 		if( (-(Math.pow(2, (obj.x - 3750))) + (570 * obj.x) - 
@@ -14,6 +17,7 @@ public class Driver{
 			return false;
 		}
 	}
+    */
 
     static int determineFitness(Candidate currentCandidate) {
     

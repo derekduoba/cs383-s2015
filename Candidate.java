@@ -1,10 +1,12 @@
 import java.util.Random;
+import java.lang.Comparable;
 
-public class Candidate{
+public class Candidate implements Comparable<Candidate> {
 
 	//You are welcome Derek.
 	public int x;
 	public int y;
+    public int score;
 
 	Candidate(){
 		generateTuple();
@@ -13,6 +15,7 @@ public class Candidate{
 	Candidate(int x, int y){
 		this.x = x;
 		this.y = y;
+        this.score = x+y;
 	}
 
 	public void generateTuple(){
@@ -24,6 +27,17 @@ public class Candidate{
 			this.x = math.nextInt(10001);
 			this.y = math.nextInt(10001);
 		}
+        this.score = x+y;
 	}
+
+    public int compareTo(Candidate otherCandidate) {
+        int result = 1;
+        if (this.score < otherCandidate.score) {
+            result = -1;
+        } else if (this.score == otherCandidate.score) {
+            result = 0;
+        }
+        return result;
+    }
 
 }
