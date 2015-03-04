@@ -43,7 +43,7 @@ public class Driver{
 				if(xMax1 > xMax2){
 					if(yMax1 > yMax2){
 						uniqueCandidate[i] = new Candidate(xMax1, yMax1);
-						uniqueCandidate[j] = ((xMax1 + yMax2) > (xMax2 + yMax1)) ? new Candidate(xMax1, yMax2) : uniqueCandidate[j] = new Candidate(xMax2, yMax1);
+						uniqueCandidate[j] = ((xMax1 + yMax2) > (xMax2 + yMax1)) ? new Candidate(xMax1, yMax2) : new Candidate(xMax2, yMax1);
 					}else{
 						uniqueCandidate[i] = new Candidate(xMax1, yMax1);
 						if(yMax1 > yMax2){
