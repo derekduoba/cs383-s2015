@@ -4,170 +4,124 @@ import java.lang.Math;
 
 public class Driver{
 
-    //PriorityQueue<Candidate> fitnessHeap;
-    Random random;
-    int generationCount = 1;
+    static ArrayList<Candidate> candidateList;
+    static ArrayList<Candidate> fitnessList;
+    static Random random;
+    static int generationCount;
+    static double highScore;
 
 	static boolean checkResult(Candidate obj){
-		if( (-(Math.pow(2, (obj.x - 3750))) + (570 * obj.x) - 
-			 2 * (Math.pow(2, (obj.y - 5000))) + (1500 * obj.y)) >= 9999975){
-			System.out.println("You Win!!\n" + "X = " + obj.x + " Y = " + obj.y + " Generation = " generationCount); 
-			return true;
+        double score = -(Math.pow(2, (obj.x - 3750))) + (570 * obj.x) - 2 * (Math.pow(2, (obj.y - 5000))) + (1500 * obj.y);
+        if (score > highScore) {
+            highScore = score;
+        }
+        if( score >= 9999975){
+			System.out.println("You Win!!\n" + "X = " + obj.x + " Y = " + obj.y + " Score = " + score + " Generation = " + generationCount); 
+            return true;
 		}else{
-			return false;
+            return false;
 		}
 	}
 
-    /*
-    // we might not need this method
-    static int determineFitness(Candidate currentCandidate) {
-    
-            // determine + set a candidate's fitness score
-            // add the current candidate to the fitness heap
-    
-    }
-    */
-
     static void performSelection(Candidate currentCandidate, int index) {
-        Math random = new Random();
         int n = (100 - index); // This ends up being the element's position
         int m = random.nextInt(100);
-
         //100e^-((x/45.7)^2.35) -> this function will provide a better distribution
         if ((n+m) <= 100) {
             // pair with m + n
-            performCrossover(currentCandidate, fitnessList.get(100 - (m+n));
+            performCrossover(currentCandidate, fitnessList.get(100 - (m+n)));
         } else {
             // pair with neighbor
-            if (i < 99) {
-                performCrossover(currentCandidate, fitnessList.get(i + 1);
+            if (index < fitnessList.size() - 1) {
+                performCrossover(currentCandidate, fitnessList.get(index + 1));
             } else {
-                performCrossover(currentCandidate, fitnessList.get(1); // started from the bottom now we here
+                performCrossover(currentCandidate, fitnessList.get(0)); // started from the bottom now we here
             }
         }
     }
 
-    /*@Derek 
-     * I tinkered with the functionality a little. In the case of some value being "out of bounds" val < 0 | val > 10,000
-     * we will "retry" mating and then give another "parent" a chance at mating. I have a base-case right now that will
-     * keep the index under 100. Feel free to read over new code and adjust it if you want. 
-     *
-     * Also, I thought about selection and one thing I did change was who the last element mated with (as you might 
-     * already notice). I am completely flexible with you changing this. And quite frankly, given that we are both really
-     * busy, I'm up for just leaving it as is. 
-     *
-     * On a side note... I would LOVE to try implementing some probability system, in the future, to see if we can't make
-     * this totally random. 
-     * 
-     * Best ~ Will
-     */
-    static void performCrossover(Candidate parentOne, Candidate parentTwo, int index) {
-        Candidate child;
 
-        // make baby
-        if(xMax1 > xMax2){
-            if(yMax1 > yMax2){
-                child = new Candidate(xMax1, yMax1);
-            }else{
-                child = new Candidate(xMax1, yMax2);
+    static void performCrossover(Candidate parentOne, Candidate parentTwo) {
+        Candidate child;
+        int xMax1 = parentOne.x;
+        int xMax2 = parentTwo.x;
+        int yMax1 = parentOne.y;
+        int yMax2 = parentTwo.y;
+        PriorityQueue<Candidate> childQueue = new PriorityQueue<Candidate>();
+        childQueue.add(new Candidate(xMax1, yMax1));
+        childQueue.add(new Candidate(xMax1, yMax2));
+        childQueue.add(new Candidate(xMax2, yMax1));
+        childQueue.add(new Candidate(xMax2, yMax2));
+
+        child = childQueue.poll();
+        while (child.score > 10000) {
+            child = childQueue.poll();
+            if (child.score > 10000 && childQueue.isEmpty()) {
+                return;
             }
-        }else{
-            if(yMax1 > yMax2){
-                child = new Candidate(xMax2, yMax1);
-            }else{
-                child = new Candidate(xMax2, yMax2);
-            }
-        }        
-        // mutate baby
-        // retry making baby if failure
-        mutateChild(child);
-        if((child.x + child.y) < 0 | (child.x + child.y) > 10000){
-            //Compares with lower value index to prevent retrying multiple times
-            performCrossover(parentOne, uniqueCandidate[index], (index + 1));
         }
-        // add mutated babies to uniqueCandidate
-        uniqueCandidate[index] = child;
-        
+        // mutate baby
+        mutateChild(child);
+        // add mutated baby to uniqueCandidate
+        candidateList.add(child);
     }
 
     static void mutateChild(Candidate currentChild) {
-        
-        // add a random number between -50 and 50
-        int mutateValue = random.nextInt(100) - 50;
-        int choice = random.nextInt(1);
-        if (choice) {
-            currentChild.x += mutateValue;
-        } else {
-            currentChild.y += mutateValue;
+        int x = currentChild.x;
+        int y = currentChild.y;
+        int score = 10001;
+        while (score > 10000) {
+            x = currentChild.x;
+            y = currentChild.y;    
+            // add a random number between -500 and 500
+            int mutateValue = random.nextInt(1000) - 500;
+            boolean choice = random.nextBoolean();
+            if (choice) {
+                x += mutateValue;
+            } else {
+                y += mutateValue;
+            }
+            score = x + y;
         }
+        
+        currentChild.x = x;
+        currentChild.y = y;
     }
 
 	public static void main(String[] args){
-		Candidate uniqueCandidate[] = new Candidate[100]; 
-		ArrayList<Candidate> fitnessList[] = new ArrayList<Candidate>(100);
-        //fitnessHeap = new PriorityQueue<Candidate>(100);
-
-        /*int iterations = 1;*/
-		
+		candidateList = new ArrayList<Candidate>(100);
+        fitnessList = new ArrayList<Candidate>(100);
+        generationCount = 1;
+        random = new Random();
+        highScore = 0;
         int i = 0, j = 1, xMax1 = 0, xMax2 = 0, yMax1 = 0, yMax2 = 0;
-        //random = new Random();
-
-		// it may be of use to need something to handle duplicates (in order to vary the population better)
+        
+		// Initialize the initial population
 		for(int x = 0; x < 100; x++){
-			uniqueCandidate[x] = new Candidate();
+            candidateList.add(new Candidate());
 		}
 
 		while(true){
 			
+            //System.out.println("GENERATION NUMBER: " + generationCount);
+            //System.out.println("HIGH SCORE: " + highScore);
+            
             for(int x = 0; x < 99; x++){
 				
                 //Checks to see if solution is found
-				if(checkResult(uniqueCandidate[x])) { break; }
-				
-                //Add elements to the fitness list too!
-                fitnessList.add(uniqueCandidate[x]);
-                uniqueCandidate[x] = null;
-
+				if(checkResult(candidateList.get(x))) { 
+                    System.exit(0);    
+                }
 			}
-			
+            fitnessList.addAll(candidateList);
+            candidateList.clear();
+            i = 0;
             while (i < 99) {
-                performCrossover(fitnessList.get(i), i);
+                performSelection(fitnessList.get(i), i);
+                i++;
             }
-
-            //i handles odd parents
-			//j handles even parents
-            /*
-            while(i < 50){
-				//variables to be used in this loop
-				xMax1 = uniqueCandidate[i].x;
-                yMax1 = uniqueCandidate[i].y;
-				xMax2 = uniqueCandidate[j].x; 
-                yMax2 = uniqueCandidate[j].y;
-
-				if(xMax1 > xMax2){
-					if(yMax1 > yMax2){
-						uniqueCandidate[i] = new Candidate(xMax1, yMax1);
-						uniqueCandidate[j] = ((xMax1 + yMax2) > (xMax2 + yMax1)) ? new Candidate(xMax1, yMax2) : new Candidate(xMax2, yMax1);
-					}else{
-						uniqueCandidate[i] = new Candidate(xMax1, yMax1);
-						if(yMax1 > yMax2){
-							uniqueCandidate[i] = new Candidate(xMax1, yMax2);
-							uniqueCandidate[j] = ((xMax1 + yMax1) > (xMax2 + yMax2)) ? new Candidate(xMax1, yMax1) : new Candidate(xMax2, yMax2);		
-						}
-					}
-				}else{
-					if(yMax1 > yMax2){
-						uniqueCandidate[i] = new Candidate(xMax2, yMax1);
-			            uniqueCandidate[j] = ((xMax2 + yMax2) > (xMax1 + yMax1)) ? new Candidate(xMax2, yMax2) : new Candidate(xMax1, yMax1);
-					}else{
-						uniqueCandidate[j] = new Candidate(xMax2, yMax2);
-						uniqueCandidate[j] = ((xMax2 + yMax1) > (xMax1 + yMax2)) ? new Candidate(xMax2, yMax1) : new Candidate(xMax1, yMax2);
-					}
-				}
-				//increment by two to only deal with odd/even parents
-				i += 2; j += 2;
-			}
-            */
+            fitnessList.clear();  
+            generationCount++;
 		}
 	}
 }
