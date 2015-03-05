@@ -25,7 +25,6 @@ public class Driver{
     
             // determine + set a candidate's fitness score
                
-
             // add the current candidate to the fitness heap
     
     }
@@ -35,31 +34,59 @@ public class Driver{
         int n = (100 - index);
         int m = random.nextInt(100);
 
-        if ((n+m) <= 100) {
+        if ((n+m) < 100) {
             // pair with index m + n
-            performCrossover(currentCandidate, fitnessList.get(m+n);
+            performCrossover(currentCandidate, fitnessList.get(m+n), index);
         } else {
             // pair with neighbor
-            if (i > 0) {
-                performCrossover(currentCandidate, fitnessList.get(i - 1);
+            if (i < 99) {
+                performCrossover(currentCandidate, fitnessList.get(index + 1), index);
             } else {
-                performCrossover(currentCandidate, fitnessList.get(99); // started from the bottom now we here
+                performCrossover(currentCandidate, fitnessList.get(99), index - m); // started from the bottom now we here
             }
         }
-
     }
 
-    static void performCrossover(Candidate parentOne, Candidate parentTwo) {
-        Candidate childOne;
-        Candidate childTwo;
+    /*@Derek 
+     * I tinkered with the functionality a little. In the case of some value being "out of bounds" val < 0 | val > 10,000
+     * we will "retry" mating and then give another "parent" a chance at mating. I have a base-case right now that will
+     * keep the index under 100. Feel free to read over new code and adjust it if you want. 
+     *
+     * Also, I thought about selection and one thing I did change was who the last element mated with (as you might 
+     * already notice). I am completely flexible with you changing this. And quite frankly, given that we are both really
+     * busy, I'm up for just leaving it as is. 
+     *
+     * On a side note... I would LOVE to try implementing some probability system, in the future, to see if we can't make
+     * this totally random. 
+     * 
+     * Best ~ Will
+     */
+    static void performCrossover(Candidate parentOne, Candidate parentTwo, int index) {
+        Candidate child;
 
-        // make babies
-        
-        // mutate babies
-        mutateChild(childOne);
-        mutateChild(childTwo);
-
+        // make baby
+        if(xMax1 > xMax2){
+            if(yMax1 > yMax2){
+                child = new Candidate(xMax1, yMax1);
+            }else{
+                child = new Candidate(xMax1, yMax2);
+            }
+        }else{
+            if(yMax1 > yMax2){
+                child = new Candidate(xMax2, yMax1);
+            }else{
+                child = new Candidate(xMax2, yMax2);
+            }
+        }        
+        // mutate baby
+        // retry making baby if failure
+        mutateChild(child);
+        if((child.x + child.y) < 0 | (child.x + child.y) > 10000){
+            //Compares with lower value index to prevent retrying multiple times
+            performCrossover(parentOne, uniqueCandidate[index], (index + 1));
+        }
         // add mutated babies to uniqueCandidate
+        uniqueCandidate[index] = child;
         
     }
 
@@ -104,7 +131,7 @@ public class Driver{
 			}
 			
             while (i < 99) {
-                performCrossover();
+                performCrossover(fitnessList.get(i), i);
             }
 
             //i handles odd parents
