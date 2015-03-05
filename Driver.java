@@ -54,9 +54,9 @@ public class Driver{
         childQueue.add(new Candidate(xMax2, yMax2));
 
         child = childQueue.poll();
-        while (child.score > 10000) {
+        while ((child.x + child.y) > 10000) {
             child = childQueue.poll();
-            if (child.score > 10000 && childQueue.isEmpty()) {
+            if ((child.x + child.y) > 10000 && childQueue.isEmpty()) {
                 return;
             }
         }
@@ -69,8 +69,8 @@ public class Driver{
     static void mutateChild(Candidate currentChild) {
         int x = currentChild.x;
         int y = currentChild.y;
-        int score = 10001;
-        while (score > 10000) {
+        int combination = 10001;
+        while (combination > 10000) {
             x = currentChild.x;
             y = currentChild.y;    
             // add a random number between -500 and 500
@@ -81,7 +81,7 @@ public class Driver{
             } else {
                 y += mutateValue;
             }
-            score = x + y;
+            combination = x + y;
         }
         
         currentChild.x = x;
@@ -103,8 +103,8 @@ public class Driver{
 
 		while(true){
 			
-            //System.out.println("GENERATION NUMBER: " + generationCount);
-            //System.out.println("HIGH SCORE: " + highScore);
+            System.out.println("GENERATION NUMBER: " + generationCount);
+            System.out.println("HIGH SCORE: " + highScore);
             
             for(int x = 0; x < 99; x++){
 				

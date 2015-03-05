@@ -6,7 +6,7 @@ public class Candidate implements Comparable<Candidate> {
 	//You are welcome Derek.
 	public int x;
 	public int y;
-    public int score;
+    public double score;
 
 	Candidate(){
 		generateTuple();
@@ -15,7 +15,7 @@ public class Candidate implements Comparable<Candidate> {
 	Candidate(int x, int y){
 		this.x = x;
 		this.y = y;
-        this.score = x+y;
+        this.score = -(Math.pow(2, (x - 3750))) + (570 * x) - 2 * (Math.pow(2, (y - 5000))) + (1500 * y);
 	}
 
 	public void generateTuple(){
@@ -27,7 +27,7 @@ public class Candidate implements Comparable<Candidate> {
 			this.x = math.nextInt(10001);
 			this.y = math.nextInt(10001);
 		}
-        this.score = x+y;
+        this.score = -(Math.pow(2, (x - 3750))) + (570 * x) - 2 * (Math.pow(2, (y - 5000))) + (1500 * y);
 	}
 
     public int compareTo(Candidate otherCandidate) {
