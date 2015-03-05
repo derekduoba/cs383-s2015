@@ -11,7 +11,8 @@ public class Driver{
     static double highScore;
 
 	static boolean checkResult(Candidate obj){
-        double score = -(Math.pow(2, (obj.x - 3750))) + (570 * obj.x) - 2 * (Math.pow(2, (obj.y - 5000))) + (1500 * obj.y);
+        double score = -(Math.pow((obj.x - 3750), 2)) + (570 * obj.x) - 2 * (Math.pow((obj.y - 5000), 2)) + (1500 * obj.y);
+        
         if (score > highScore) {
             highScore = score;
         }
@@ -47,6 +48,8 @@ public class Driver{
         int xMax2 = parentTwo.x;
         int yMax1 = parentOne.y;
         int yMax2 = parentTwo.y;
+
+        
         PriorityQueue<Candidate> childQueue = new PriorityQueue<Candidate>();
         childQueue.add(new Candidate(xMax1, yMax1));
         childQueue.add(new Candidate(xMax1, yMax2));
@@ -54,12 +57,16 @@ public class Driver{
         childQueue.add(new Candidate(xMax2, yMax2));
 
         child = childQueue.poll();
+
+        //System.out.println("CHILD X: " + child.x + " CHILD Y: " + child.y + " SCORE: " + child.score);
+
         while ((child.x + child.y) > 10000) {
             child = childQueue.poll();
             if ((child.x + child.y) > 10000 && childQueue.isEmpty()) {
                 return;
             }
         }
+        
         // mutate baby
         mutateChild(child);
         // add mutated baby to uniqueCandidate
@@ -73,14 +80,9 @@ public class Driver{
         while (combination > 10000) {
             x = currentChild.x;
             y = currentChild.y;    
-            // add a random number between -500 and 500
-            int mutateValue = random.nextInt(1000) - 500;
-            boolean choice = random.nextBoolean();
-            if (choice) {
-                x += mutateValue;
-            } else {
-                y += mutateValue;
-            }
+            // add a random number between -800 and -800
+            x += random.nextInt(1600) - 800;
+            y += random.nextInt(1600) - 800;
             combination = x + y;
         }
         
