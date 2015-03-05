@@ -9,7 +9,6 @@ public class Driver{
     int generationCount = 1;
 
 	static boolean checkResult(Candidate obj){
-		//temporarily 5,000,000; will eventually be ~10,000,000 - 25
 		if( (-(Math.pow(2, (obj.x - 3750))) + (570 * obj.x) - 
 			 2 * (Math.pow(2, (obj.y - 5000))) + (1500 * obj.y)) >= 9999975){
 			System.out.println("You Win!!\n" + "X = " + obj.x + " Y = " + obj.y + " Generation = " generationCount); 
@@ -19,31 +18,33 @@ public class Driver{
 		}
 	}
 
-
+    /*
     // we might not need this method
     static int determineFitness(Candidate currentCandidate) {
     
             // determine + set a candidate's fitness score
-               
+                   
 
             // add the current candidate to the fitness heap
     
     }
+    */
 
     static void performSelection(Candidate currentCandidate, int index) {
         Math random = new Random();
-        int n = (100 - index);
+        int n = (100 - index); // This ends up being the element's position
         int m = random.nextInt(100);
 
+        //100e^-((x/45.7)^2.35) -> this function will provide a better distribution
         if ((n+m) <= 100) {
-            // pair with index m + n
-            performCrossover(currentCandidate, fitnessList.get(m+n);
+            // pair with m + n
+            performCrossover(currentCandidate, fitnessList.get(100 - (m+n));
         } else {
             // pair with neighbor
-            if (i > 0) {
-                performCrossover(currentCandidate, fitnessList.get(i - 1);
+            if (i < 99) {
+                performCrossover(currentCandidate, fitnessList.get(i + 1);
             } else {
-                performCrossover(currentCandidate, fitnessList.get(99); // started from the bottom now we here
+                performCrossover(currentCandidate, fitnessList.get(1); // started from the bottom now we here
             }
         }
 
